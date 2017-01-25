@@ -1,5 +1,8 @@
-from ..delayed_assert import expect, assert_expectations
- 
+# from ..delayed_assert import expect, assert_expectations
+
+from delayed_assert import expect, assert_expectations
+
+
 class TestDelayedAssert:
  
     def test_should_pass(self):
