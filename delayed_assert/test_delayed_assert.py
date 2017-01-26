@@ -1,6 +1,8 @@
+import unittest
 from delayed_assert import expect, assert_expectations
- 
-class TestDelayedAssert:
+
+
+class TestDelayedAssert(unittest.TestCase):
  
     def test_should_pass(self):
         expect(1 == 1, 'one is one')

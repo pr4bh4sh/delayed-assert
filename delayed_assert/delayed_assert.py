@@ -11,7 +11,7 @@ Interface is 2 functions:
  
 Usage Example:
  
-    from expectations import expect, assert_expectations
+    from delayed_assert import expect, assert_expectations
  
     def test_should_pass():
         expect(1 == 1, 'one is one')
