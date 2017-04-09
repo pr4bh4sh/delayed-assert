@@ -4,7 +4,7 @@ Delayed aka. Soft asserts for python, Credit : <http://pythontesting.net/strateg
 
 #### Install via pip:
 
-    pip install https://github.com/pr4bh4sh/python-delayed-assert
+    pip install git+https://github.com/pr4bh4sh/python-delayed-assert
 
 #### Import as:
 
