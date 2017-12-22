@@ -1,6 +1,6 @@
 # python-delayeassert
 
-Delayed aka. Soft asserts for python, Credit : <http://pythontesting.net/strategy/delayed-assert/>
+Delayed aka. Soft asserts for python
 
 #### Install via pip:
 
@@ -11,3 +11,5 @@ Delayed aka. Soft asserts for python, Credit : <http://pythontesting.net/strateg
     from delayed_assert import delayed_assert
 
 See example unittest for usage. Should work with other testing frameworks.
+
+Credit : <http://pythontesting.net/strategy/delayed-assert/>
