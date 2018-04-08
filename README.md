@@ -1,4 +1,4 @@
-# python-delayeassert
+# python-delayed-assert
 
 Delayed aka. Soft asserts for python
 
