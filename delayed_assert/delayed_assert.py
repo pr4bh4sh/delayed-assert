@@ -46,7 +46,7 @@ def _log_failure(msg=None):
     (file_path, line, funcname, contextlist) =  inspect.stack()[2][1:5]
     context = contextlist[0]
     _failed_expectations.append(Color.FAIL+'Failed at "'+ Color.ENDC + Color.OKBLUE + Color.UNDERLINE + '%s:%s' % (file_path, line) + Color.ENDC + Color.FAIL + '", in %s()%s\n%s' %
-        (funcname, (('\n%s' % msg) + Color.ENDC if msg else ''+Color.ENDC), context))
+        (funcname, ((Color.BOLD + Color.UNDERLINE + '\nErrorMessage: %s' % msg) + Color.ENDC if msg else ''+Color.ENDC), context))
 
 def _report_failures():
     global _failed_expectations
@@ -55,7 +55,7 @@ def _report_failures():
         report = [
             Color.WARNING + '\n\nassert_expectations() called at' + Color.ENDC,
             Color.UNDERLINE + Color.OKBLUE+'"%s:%s"' % (file_path, line) + Color.ENDC + Color.WARNING +' in %s()\n' % (funcname),
-            Color.FAIL + Color.BOLD + 'Failed Expectations : %s\n' % len(_failed_expectations) + Color.ENDC]
+            Color.FAIL + Color.UNDERLINE + 'Failed Expectations : %s\n' % len(_failed_expectations) + Color.ENDC]
         for i,failure in enumerate(_failed_expectations, start=1):
             report.append('%d: %s' % (i, failure))
         _failed_expectations = []

@@ -8,7 +8,7 @@ class ExampleUnittest(unittest.TestCase):
 
         delayed_assert.expect(1 == 2) # will fail but won't stop execution
 
-        delayed_assert.expect(1 == 2) # will fail but won't stop execution
+        delayed_assert.expect(3 == 2, "Value don't match") # will fail but won't stop execution
 
         delayed_assert.expect(3 == 3) # will succeed
         
