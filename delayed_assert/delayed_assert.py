@@ -29,9 +29,10 @@ def expect(expr, msg=None):
     'keeps track of failed expectations'
     global _failed_expectations, _is_first_call
     
-    if _is_first_call:
+    caller = inspect.stack()[1][3]    
+    if _is_first_call.get(caller, True) == True :
         _failed_expectations = []
-        _is_first_call = False 
+        _is_first_call[caller] = False
 
     if not expr:
         _log_failure(msg)
@@ -47,7 +48,7 @@ import inspect
 import os.path
 
 _failed_expectations = []
-_is_first_call = True
+_is_first_call = dict()
 
 def _log_failure(msg=None):
     (file_path, line, funcname, contextlist) =  inspect.stack()[2][1:5]
