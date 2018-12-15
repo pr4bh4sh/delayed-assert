@@ -14,6 +14,7 @@ Delayed aka. Soft asserts for python
 
 See example unittest for usage. Should work with other testing frameworks.
 
-Credit : <http://pythontesting.net/strategy/delayed-assert/>
+![Sample](https://github.com/pr4bh4sh/python-delayed-assert/raw/colorise-output/sample.jpg)
 
-[![Analytics](https://ga-beacon.appspot.com/UA-112360589-1/python-delayed-assert/README.md?pixel)](https://github.com/igrigorik/ga-beacon)
+
+Credit : <http://pythontesting.net/strategy/delayed-assert/>

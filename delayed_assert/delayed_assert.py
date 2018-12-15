@@ -50,22 +50,32 @@ _failed_expectations = []
 _is_first_call = True
 
 def _log_failure(msg=None):
-    (filename, line, funcname, contextlist) =  inspect.stack()[2][1:5]
-    filename = os.path.basename(filename)
+    (file_path, line, funcname, contextlist) =  inspect.stack()[2][1:5]
     context = contextlist[0]
-    _failed_expectations.append('file "%s", line %s, in %s()%s\n%s' %
-        (filename, line, funcname, (('\n%s' % msg) if msg else ''), context))
+    _failed_expectations.append(Color.FAIL+'Failed at "'+ Color.ENDC + Color.OKBLUE + Color.UNDERLINE + '%s:%s' % (file_path, line) + Color.ENDC + Color.FAIL + '", in %s()%s\n%s' %
+        (funcname, ((Color.BOLD + Color.UNDERLINE + '\nErrorMessage: %s' % msg) + Color.ENDC if msg else ''+Color.ENDC), context))
 
 def _report_failures():
     global _failed_expectations
     if _failed_expectations:
-        (filename, line, funcname) =  inspect.stack()[2][1:4]
+        (file_path, line, funcname) =  inspect.stack()[2][1:4]
         report = [
-            '\n\nassert_expectations() called from',
-            '"%s" line %s, in %s()\n' % (os.path.basename(filename), line, funcname),
-            'Failed Expectations:%s\n' % len(_failed_expectations)]
+            Color.WARNING + '\n\nassert_expectations() called at' + Color.ENDC,
+            Color.UNDERLINE + Color.OKBLUE+'"%s:%s"' % (file_path, line) + Color.ENDC + Color.WARNING +' in %s()\n' % (funcname),
+            Color.FAIL + Color.UNDERLINE + 'Failed Expectations : %s\n' % len(_failed_expectations) + Color.ENDC]
         for i,failure in enumerate(_failed_expectations, start=1):
             report.append('%d: %s' % (i, failure))
         _failed_expectations = []
     return ('\n'.join(report))
  
+
+class Color:
+    HEADER = '\033[35m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    BLINK = '\33[5m'
