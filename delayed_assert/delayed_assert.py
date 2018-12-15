@@ -27,6 +27,12 @@ Usage Example:
 
 def expect(expr, msg=None):
     'keeps track of failed expectations'
+    global _failed_expectations, _is_first_call
+    
+    if _is_first_call:
+        _failed_expectations = []
+        _is_first_call = False 
+
     if not expr:
         _log_failure(msg)
 
@@ -41,6 +47,7 @@ import inspect
 import os.path
 
 _failed_expectations = []
+_is_first_call = True
 
 def _log_failure(msg=None):
     (filename, line, funcname, contextlist) =  inspect.stack()[2][1:5]
