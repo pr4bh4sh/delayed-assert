@@ -8,6 +8,8 @@ class ExampleUnittest(unittest.TestCase):
 
         delayed_assert.expect(1 == 2) # will fail but won't stop execution
 
+        delayed_assert.expect(1 == 2) # will fail but won't stop execution
+
         delayed_assert.expect(3 == 3) # will succeed
         
         # will stop execution and show the stack trace of 2nd assertion
