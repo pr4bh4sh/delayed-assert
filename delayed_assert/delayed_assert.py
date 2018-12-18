@@ -30,7 +30,7 @@ def expect(expr, msg=None):
     global _failed_expectations, _is_first_call
     
     caller = inspect.stack()[1][3]    
-    if _is_first_call.get(caller, True) == True :
+    if _is_first_call.get(caller, True):
         _failed_expectations = []
         _is_first_call[caller] = False
 
