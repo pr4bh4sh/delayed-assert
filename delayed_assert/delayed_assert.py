@@ -24,6 +24,12 @@ Usage Example:
 '''
 
 # ---------------------------------------------------
+import types
+import inspect
+import os.path
+
+_failed_expectations = []
+_is_first_call = dict()
 
 def expect(expr, msg=None):
     'keeps track of failed expectations'
@@ -34,7 +40,16 @@ def expect(expr, msg=None):
         _failed_expectations = []
         _is_first_call[caller] = False
 
-    if not expr:
+    '''
+    Python lambda does not support statement inside lambda, so
+    `lambda: assert 1 == 1` won't work as it's not valid lambda expression
+    '''
+    if isinstance(expr, types.FunctionType):
+        try:
+            expr()
+        except Exception as e:
+            _log_failure(e)            
+    elif not expr:
         _log_failure(msg)
 
 def assert_expectations():
@@ -44,17 +59,11 @@ def assert_expectations():
 
 # ---------------------------------------------------
 
-import inspect
-import os.path
-
-_failed_expectations = []
-_is_first_call = dict()
-
 def _log_failure(msg=None):
     (file_path, line, funcname, contextlist) =  inspect.stack()[2][1:5]
     context = contextlist[0]
     _failed_expectations.append(Color.FAIL+'Failed at "'+ Color.ENDC + Color.OKBLUE + Color.UNDERLINE + '%s:%s' % (file_path, line) + Color.ENDC + Color.FAIL + '", in %s()%s\n%s' %
-        (funcname, ((Color.BOLD + Color.UNDERLINE + '\nErrorMessage: %s' % msg) + Color.ENDC if msg else ''+Color.ENDC), context))
+        (funcname, (('\n\t' + Color.BOLD + Color.UNDERLINE + 'ErrorMessage:' + Color.ENDC + Color.FAIL + '\t%s' % msg + Color.ENDC)), context))
 
 def _report_failures():
     global _failed_expectations
