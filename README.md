@@ -29,7 +29,7 @@ won't work as it's not valid lambda expression
 
 See `ExampleUnittest.py` for usage.
 
-![Sample](https://github.com/pr4bh4sh/python-delayed-assert/raw/colorise-output/sample.jpg)
+![Sample](https://github.com/pr4bh4sh/python-delayed-assert/blob/master/sample.jpg)
 
 
 Credit : <http://pythontesting.net/strategy/delayed-assert/>
