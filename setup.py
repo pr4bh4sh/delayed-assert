@@ -8,9 +8,10 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name='delayed_assert',
     version='0.3.1',
+    description='Delayed/soft assertions for python',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    author='pr4bh4sh, aaronbannin',
+    author='pr4bh4sh',
     url='https://github.com/pr4bh4sh/python-delayed-assert',
     packages=['delayed_assert'],
 )
