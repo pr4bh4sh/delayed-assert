@@ -59,6 +59,15 @@ def assert_expectations():
 
 # ---------------------------------------------------
 
+from contextlib import contextmanager
+
+@contextmanager
+def assert_all():
+    yield
+    assert_expectations()
+
+# ---------------------------------------------------
+
 def _log_failure(msg=None):
     (file_path, line, funcname, contextlist) =  inspect.stack()[2][1:5]
     context = contextlist[0]
@@ -78,6 +87,7 @@ def _report_failures():
         _failed_expectations = []
     return ('\n'.join(report))
  
+# ---------------------------------------------------
 
 class Color:
     HEADER = '\033[35m'
