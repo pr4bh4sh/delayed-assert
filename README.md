@@ -16,11 +16,15 @@ Few features:
 
 ### Install via pip
 
+```bash
     pip install delayed-assert
+```
 
 ### Install from master
 
+```bash
     pip install git+https://github.com/pr4bh4sh/python-delayed-assert
+```
 
 ## Uses
 
@@ -30,12 +34,19 @@ See `ExampleUnittest.py` for usage.
 
 Pass the assertion call as
 
+```python
     lambda: self.assertListEqual([4,5,6,2,5],[7,8])
+```
+
 While I've tested only with unittest asserttion,It should be able to use any assertion library.
 
 Keep in mind that, Python does not support statement inside lambda, so
+
+```python
     lambda: assert 1 == 1
-won't work as it's not valid lambda expression
+```
+
+won't work as it is not a valid lambda expression in python
 
 ![Sample](https://github.com/pr4bh4sh/python-delayed-assert/blob/master/sample.jpg)
 
