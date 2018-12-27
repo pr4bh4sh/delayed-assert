@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/pr4bh4sh/python-delayed-assert.svg?branch=master)](https://travis-ci.org/pr4bh4sh/python-delayed-assert)
 [![PyPI version](https://badge.fury.io/py/delayed-assert.svg)](https://badge.fury.io/py/delayed-assert)
 [![Downloads](https://pepy.tech/badge/delayed-assert)](https://pepy.tech/project/delayed-assert)
 [![Downloads](https://pepy.tech/badge/delayed-assert/month)](https://pepy.tech/project/delayed-assert)
