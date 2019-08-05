@@ -24,7 +24,7 @@ Few features:
 ### Install from master
 
 ```bash
-    pip install git+https://github.com/pr4bh4sh/python-delayed-assert
+    pip install git+https://github.com/pr4bh4sh/delayed-assert
 ```
 
 ## Uses
