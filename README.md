@@ -49,7 +49,7 @@ Keep in mind that, Python does not support statement inside lambda, so
 
 won't work as it is not a valid lambda expression in python
 
-![Sample](https://github.com/pr4bh4sh/python-delayed-assert/blob/master/sample.jpg)
+![Sample](https://raw.githubusercontent.com/pr4bh4sh/delayed-assert/master/sample.jpg)
 
 ---------------
 
