@@ -36,7 +36,7 @@ See `ExampleUnittest.py` for usage.
 Pass the assertion call as
 
 ```python
-    lambda: self.assertListEqual([4,5,6,2,5],[7,8])
+    expect(lambda: self.assertListEqual([4,5,6,2,5],[7,8]))
 ```
 
 While I've tested only with unittest asserttion,It should be able to use any assertion library.
@@ -44,7 +44,7 @@ While I've tested only with unittest asserttion,It should be able to use any ass
 Keep in mind that, Python does not support statement inside lambda, so
 
 ```python
-    lambda: assert 1 == 1
+    expect(lambda: assert 1 == 1)
 ```
 
 won't work as it is not a valid lambda expression in python
