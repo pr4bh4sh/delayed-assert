@@ -30,4 +30,10 @@ class ExampleUnittest(unittest.TestCase):
             expect([3,4] == [3,4], 'This message wont be printed')
             # No need to call delayed_assert.assert_expectations() when using context maneger is used
 
+    @delayed_assert.assert_all()
+    def testMethodChainCall(self):
+        self.verify()
+        expect('No' == 'yes', 'Printed after Distributed expect method call')
 
+    def verify(self):
+        expect(not False, 'Distributed expect method call')

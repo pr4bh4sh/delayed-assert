@@ -21,6 +21,9 @@ Usage Example:
         expect(1 == 2, 'one is two')
         expect(1 == 3, 'one is three')
         assert_expectations()
+        
+    https://github.com/rackerlabs/python-proboscis/blob/master/proboscis/check.py
+
 '''
 
 # ---------------------------------------------------
@@ -34,8 +37,20 @@ _is_first_call = dict()
 def expect(expr, msg=None):
     'keeps track of failed expectations'
     global _failed_expectations, _is_first_call
-    
-    caller = inspect.stack()[1][3]    
+    caller = ''
+
+    '''
+    ensure that the call is coming from 'test*' method
+    '''
+    stack_list = inspect.stack()
+    for stack in stack_list:
+        if stack.function.startswith('test'):
+            caller = stack.function
+            break
+
+    if caller == '':
+        raise Exception("Could not identify test method, make sure the call for 'expect' method is originated with 'test' method")
+
     if _is_first_call.get(caller, True):
         _failed_expectations = []
         _is_first_call[caller] = False
