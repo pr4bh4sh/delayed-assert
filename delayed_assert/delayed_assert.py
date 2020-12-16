@@ -78,8 +78,10 @@ from contextlib import contextmanager
 
 @contextmanager
 def assert_all():
-    yield
-    assert_expectations()
+    try:
+        yield
+    finally:
+        assert_expectations()
 
 # ---------------------------------------------------
 
