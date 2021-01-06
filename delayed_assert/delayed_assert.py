@@ -1,4 +1,4 @@
-'''
+"""
 Implements one form of delayed assertions.
 
 Interface is 2 functions:
@@ -24,24 +24,22 @@ Usage Example:
         
     https://github.com/rackerlabs/python-proboscis/blob/master/proboscis/check.py
 
-'''
+"""
 
 # ---------------------------------------------------
 import types
 import inspect
-import os.path
 
 _failed_expectations = []
 _is_first_call = dict()
 
+
 def expect(expr, msg=None):
-    'keeps track of failed expectations'
+    """keeps track of failed expectations"""
     global _failed_expectations, _is_first_call
     caller = ''
 
-    '''
-    ensure that the call is coming from 'test*' method
-    '''
+    """ensure that the call is coming from 'test*' method"""
     stack_list = inspect.stack()
     for stack in stack_list:
         if stack.function.startswith('test'):
@@ -55,26 +53,29 @@ def expect(expr, msg=None):
         _failed_expectations = []
         _is_first_call[caller] = False
 
-    '''
+    """
     Python lambda does not support statement inside lambda, so
     `lambda: assert 1 == 1` won't work as it's not valid lambda expression
-    '''
+    """
     if isinstance(expr, types.FunctionType):
         try:
             expr()
         except Exception as e:
-            _log_failure(e)            
+            _log_failure(e)
     elif not expr:
         _log_failure(msg)
 
+
 def assert_expectations():
-    'raise an assert if there are any failed expectations'
+    """raise an assert if there are any failed expectations"""
     if _failed_expectations:
         assert False, _report_failures()
 
 # ---------------------------------------------------
 
+
 from contextlib import contextmanager
+
 
 @contextmanager
 def assert_all():
@@ -85,26 +86,33 @@ def assert_all():
 
 # ---------------------------------------------------
 
+
 def _log_failure(msg=None):
-    (file_path, line, funcname, contextlist) =  inspect.stack()[2][1:5]
+    (file_path, line, funcname, contextlist) = inspect.stack()[2][1:5]
     context = contextlist[0]
-    _failed_expectations.append(Color.FAIL+'Failed at "'+ Color.ENDC + Color.OKBLUE + Color.UNDERLINE + '%s:%s' % (file_path, line) + Color.ENDC + Color.FAIL + '", in %s()%s\n%s' %
-        (funcname, (('\n\t' + Color.BOLD + Color.UNDERLINE + 'ErrorMessage:' + Color.ENDC + Color.FAIL + '\t%s' % msg + Color.ENDC)), context))
+    failed_at_header = Color.FAIL + 'Failed at "' + Color.ENDC
+    failed_location = failed_at_header + Color.OKBLUE + Color.UNDERLINE + '%s:%s' % (file_path, line) + Color.ENDC
+    formatted_message = Color.FAIL + '\t%s' % msg + Color.ENDC
+    error_message_header = Color.BOLD + Color.UNDERLINE + 'ErrorMessage:' + Color.ENDC
+    failed_method_and_message = Color.FAIL + '", in %s()%s\n%s' % (funcname, '\n\t' + error_message_header + formatted_message, context)
+    _failed_expectations.append(failed_location + failed_method_and_message)
+
 
 def _report_failures():
     global _failed_expectations
     if _failed_expectations:
-        (file_path, line, funcname) =  inspect.stack()[2][1:4]
+        (file_path, line, funcname) = inspect.stack()[2][1:4]
         report = [
             Color.WARNING + '\n\nassert_expectations() called at' + Color.ENDC,
-            Color.UNDERLINE + Color.OKBLUE+'"%s:%s"' % (file_path, line) + Color.ENDC + Color.WARNING +' in %s()\n' % (funcname),
+            Color.UNDERLINE + Color.OKBLUE+'"%s:%s"' % (file_path, line) + Color.ENDC + Color.WARNING + ' in %s()\n' % funcname,
             Color.FAIL + Color.UNDERLINE + 'Failed Expectations : %s\n' % len(_failed_expectations) + Color.ENDC]
-        for i,failure in enumerate(_failed_expectations, start=1):
+        for i, failure in enumerate(_failed_expectations, start=1):
             report.append('%d: %s' % (i, failure))
         _failed_expectations = []
-    return ('\n'.join(report))
- 
+    return '\n'.join(report)
+
 # ---------------------------------------------------
+
 
 class Color:
     HEADER = '\033[35m'
