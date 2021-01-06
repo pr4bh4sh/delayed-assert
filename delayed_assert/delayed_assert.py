@@ -38,7 +38,21 @@ def expect(expr, msg=None):
     'keeps track of failed expectations'
     global _failed_expectations, _is_first_call
     caller = ''
-
+    
+    '''
+    use correct caller if the call is coming from 'test*' method
+    '''
+    stack_list = inspect.stack()
+    for stack in stack_list:
+        if stack.function.startswith('test'):
+            caller = stack.function
+            break
+            
+    # As per the inspect doc. https://docs.python.org/3/library/inspect.html, first entry is a caller      
+    # If the caller is empty then use the function from first entry as a caller 
+    if caller == '':
+      caller = stack_list[0].function
+      
     if _is_first_call.get(caller, True):
         _failed_expectations = []
         _is_first_call[caller] = False
