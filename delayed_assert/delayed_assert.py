@@ -39,18 +39,6 @@ def expect(expr, msg=None):
     global _failed_expectations, _is_first_call
     caller = ''
 
-    '''
-    ensure that the call is coming from 'test*' method
-    '''
-    stack_list = inspect.stack()
-    for stack in stack_list:
-        if stack.function.startswith('test'):
-            caller = stack.function
-            break
-
-    if caller == '':
-        raise Exception("Could not identify test method, make sure the call for 'expect' method is originated with 'test' method")
-
     if _is_first_call.get(caller, True):
         _failed_expectations = []
         _is_first_call[caller] = False
