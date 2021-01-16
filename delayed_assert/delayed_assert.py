@@ -44,8 +44,9 @@ def expect(expr, msg=None):
     '''
     stack_list = inspect.stack()
     for stack in stack_list:
-        if stack.function.startswith('test'):
-            caller = stack.function
+        func_name = getattr(stack, 'function', stack[3])
+        if func_name.startswith('test'):
+            caller = func_name
             break
 
     if caller == '':
