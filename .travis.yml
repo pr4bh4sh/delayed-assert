@@ -8,4 +8,4 @@ python:
   - "3.6"
   - "3.7"
 
-script: python -m unittest test.py
+script: python -m unittest test
