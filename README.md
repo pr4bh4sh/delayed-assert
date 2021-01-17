@@ -31,7 +31,7 @@ Few features:
 
 ## Uses
 
-See `ExampleUnittest.py` for usage.
+See `example_unittest.py` for usage.
 
 ### Using assertion library with lambda
 
