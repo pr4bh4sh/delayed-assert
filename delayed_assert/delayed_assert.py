@@ -93,7 +93,7 @@ def expect(expr, msg=None):
     stack_list = inspect.stack()
     for stack in stack_list:
         func_name = getattr(stack, 'function', stack[3])
-        if func_name.startswith('test'):
+        if func_name.__contains__('test'):
             caller = func_name
             break
 
