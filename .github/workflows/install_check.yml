@@ -1,0 +1,37 @@
+name: Install from Source Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types: [published]
+
+jobs:
+  install-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install from source
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
+        
+    - name: Verify installation
+      run: |
+        # Change directory to ensure we test the installed package, not the local source
+        mkdir test_verification
+        cp tests/verify_install.py test_verification/
+        cd test_verification
+        python verify_install.py
