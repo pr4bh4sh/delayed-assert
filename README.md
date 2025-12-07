@@ -85,4 +85,41 @@ won't work as it is not a valid lambda expression in python
 
 ---------------
 
+## Color Output Control
+
+The library supports toggling colorized output on/off via environment variable or programmatically.
+
+### Disable Colors via Environment Variable
+
+```bash
+# Disable colors
+DELAYED_ASSERT_ENABLE_COLOR=0 python -m pytest
+
+# Enable colors (default)
+DELAYED_ASSERT_ENABLE_COLOR=1 python -m pytest
+```
+
+Values that disable colors: `0`, `false`, `no`, `off` (case-insensitive)
+
+### Disable Colors Programmatically
+
+```python
+from delayed_assert.delayed_assert import set_color_enabled, get_color_enabled
+
+# Disable colors
+set_color_enabled(False)
+
+# Check status
+if get_color_enabled():
+    print("Colors are enabled")
+```
+
+This is useful for:
+- CI/CD environments where ANSI color codes may not be supported
+- Log files where color codes create noise
+- Environments with accessibility requirements
+
+---------------
+
 Credit : <http://pythontesting.net/strategy/delayed-assert/>
+
