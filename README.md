@@ -136,6 +136,22 @@ from delayed_assert.delayed_assert import set_check_caller
 set_check_caller(False)
 ```
 
+**Using the `@test_case` Decorator:**
+
+Alternatively, you can mark any function as a test case using the `@test_case` decorator. This allows `expect()` to identify the function correctly without disabling verificaton globally.
+
+```python
+from delayed_assert import expect, assert_expectations, test_case
+
+@test_case
+def verify_custom_scenario():
+    expect(1 == 1, "Should pass")
+
+def test_runner():
+    verify_custom_scenario()
+    assert_expectations()
+```
+
 ---------------
 
 Credit : <http://pythontesting.net/strategy/delayed-assert/>
