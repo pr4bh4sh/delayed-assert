@@ -93,10 +93,10 @@ The library supports toggling colorized output on/off via environment variable o
 
 ```bash
 # Disable colors
-DELAYED_ASSERT_ENABLE_COLOR=0 python -m pytest
+DELAYED_ASSERT_ENABLE_COLOR=0 python -m unittest example_unittest.py
 
 # Enable colors (default)
-DELAYED_ASSERT_ENABLE_COLOR=1 python -m pytest
+DELAYED_ASSERT_ENABLE_COLOR=1 python -m unittest example_unittest.py
 ```
 
 Values that disable colors: `0`, `false`, `no`, `off` (case-insensitive)
