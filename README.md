@@ -119,6 +119,23 @@ This is useful for:
 - Log files where color codes create noise
 - Environments with accessibility requirements
 
+### Caller Stack Verification
+
+By default, the library verifies that `expect()` is called from a method named `test*`. 
+You can disable this check if you need to use `expect()` in helper methods or custom test runners.
+
+**Disable via Environment Variable:**
+```bash
+DELAYED_ASSERT_CHECK_CALLER=0 python -m unittest example_unittest.py
+```
+
+**Disable Programmatically:**
+```python
+from delayed_assert.delayed_assert import set_check_caller
+
+set_check_caller(False)
+```
+
 ---------------
 
 Credit : <http://pythontesting.net/strategy/delayed-assert/>
