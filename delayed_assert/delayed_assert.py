@@ -135,7 +135,7 @@ def _report_failures():
 
 def expect(expr, msg=None):
     """Keep track of failed expectations."""
-    global _failed_expectations
+    global _failed_expectations, _is_first_call  # noqa: F824
     caller = ''
 
     # Ensure that the call is coming from 'test*' method
