@@ -31,19 +31,7 @@ jobs:
     - name: Verify installation
       run: |
         # Change directory to ensure we test the installed package, not the local source
-        mkdir test_install
-        cd test_install
-        cat <<EOF > verify.py
-        import delayed_assert
-        import sys
-        print(f'Successfully imported delayed_assert from {delayed_assert.__file__}')
-        from delayed_assert import expect, assert_expectations
-        try:
-            expect(1 == 1)
-            assert_expectations()
-            print('Basic functionality verification passed')
-        except Exception as e:
-            print(f'Failed: {e}')
-            sys.exit(1)
-        EOF
-        python verify.py
+        mkdir test_verification
+        cp tests/verify_install.py test_verification/
+        cd test_verification
+        python verify_install.py
