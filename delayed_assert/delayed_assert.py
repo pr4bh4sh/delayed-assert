@@ -28,11 +28,18 @@ https://github.com/rackerlabs/python-proboscis/blob/master/proboscis/check.py
 
 import types
 import inspect
+import os
 from contextlib import contextmanager
 
 
+# Global flag to control colorization
+# Can be controlled via environment variable DELAYED_ASSERT_ENABLE_COLOR
+# or programmatically via set_color_enabled()
+_color_enabled = os.environ.get('DELAYED_ASSERT_ENABLE_COLOR', '1').lower() not in ('0', 'false', 'no', 'off')
+
+
 class Color:
-    """Colors definition."""
+    """Colors definition with ANSI escape codes."""
 
     HEADER = '\033[35m'
     OKBLUE = '\033[94m'
@@ -45,21 +52,62 @@ class Color:
     BLINK = '\33[5m'
 
 
+class NoColor:
+    """No-color definition - all attributes return empty strings."""
+
+    HEADER = ''
+    OKBLUE = ''
+    OKGREEN = ''
+    WARNING = ''
+    FAIL = ''
+    ENDC = ''
+    BOLD = ''
+    UNDERLINE = ''
+    BLINK = ''
+
+
+def _get_color_instance():
+    """Get the appropriate color instance based on the enabled flag."""
+    return Color if _color_enabled else NoColor
+
+
+def set_color_enabled(enabled):
+    """
+    Enable or disable color output.
+    
+    Args:
+        enabled (bool): True to enable colors, False to disable
+    """
+    global _color_enabled
+    _color_enabled = enabled
+
+
+def get_color_enabled():
+    """
+    Get the current color enabled status.
+    
+    Returns:
+        bool: True if colors are enabled, False otherwise
+    """
+    return _color_enabled
+
+
 _failed_expectations = []
 _is_first_call = dict()
 
 
 def _log_failure(msg=None):
     """Collect failure log."""
+    color = _get_color_instance()
     file_path, line, funcname, contextlist = inspect.stack()[2][1:5]
     context = contextlist[0]
     _failed_expectations.append(
-        Color.FAIL+'Failed at "' + Color.ENDC + Color.OKBLUE + Color.UNDERLINE
-        + '%s:%s' % (file_path, line) + Color.ENDC + Color.FAIL +
+        color.FAIL+'Failed at "' + color.ENDC + color.OKBLUE + color.UNDERLINE
+        + '%s:%s' % (file_path, line) + color.ENDC + color.FAIL +
         '", in %s()%s\n%s' % (
             funcname,
-            ('\n\t' + Color.BOLD + Color.UNDERLINE + 'ErrorMessage:' +
-             Color.ENDC + Color.FAIL + '\t%s' % msg + Color.ENDC),
+            ('\n\t' + color.BOLD + color.UNDERLINE + 'ErrorMessage:' +
+             color.ENDC + color.FAIL + '\t%s' % msg + color.ENDC),
             context)
     )
 
@@ -67,16 +115,17 @@ def _log_failure(msg=None):
 def _report_failures():
     """Report collected failures."""
     global _failed_expectations
+    color = _get_color_instance()
     report = []
 
     if _failed_expectations:
         file_path, line, funcname = inspect.stack()[2][1:4]
         report = [
-            Color.WARNING + '\n\nassert_expectations() called at' + Color.ENDC,
-            Color.UNDERLINE + Color.OKBLUE + '"%s:%s"' % (file_path, line) +
-            Color.ENDC + Color.WARNING + ' in %s()\n' % funcname,
-            Color.FAIL + Color.UNDERLINE + 'Failed Expectations : %s\n' %
-            len(_failed_expectations) + Color.ENDC]
+            color.WARNING + '\n\nassert_expectations() called at' + color.ENDC,
+            color.UNDERLINE + color.OKBLUE + '"%s:%s"' % (file_path, line) +
+            color.ENDC + color.WARNING + ' in %s()\n' % funcname,
+            color.FAIL + color.UNDERLINE + 'Failed Expectations : %s\n' %
+            len(_failed_expectations) + color.ENDC]
         for i, failure in enumerate(_failed_expectations, start=1):
             report.append('%d: %s' % (i, failure))
         _failed_expectations = []
@@ -86,7 +135,7 @@ def _report_failures():
 
 def expect(expr, msg=None):
     """Keep track of failed expectations."""
-    global _failed_expectations, _is_first_call
+    global _failed_expectations, _is_first_call  # noqa: F824
     caller = ''
 
     # Ensure that the call is coming from 'test*' method
