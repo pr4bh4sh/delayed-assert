@@ -1,7 +1,16 @@
 import unittest
-from delayed_assert import delayed_assert, expect, assert_expectations
+from delayed_assert import delayed_assert, expect, assert_expectations, test_case
 
 class ExampleUnittest(unittest.TestCase):
+
+    @test_case
+    def verify_via_helper(self):
+        expect(1 == 1)
+
+    def testUsingHelper(self):
+        self.verify_via_helper()
+        assert_expectations()
+
 
     def testSomething(self):
         delayed_assert.expect(1 == 1) # will succeed

@@ -81,6 +81,12 @@ won't work as it is not a valid lambda expression in python
             expect([3,4] == [3,4], 'This message wont be printed')
             # No need to call delayed_assert.assert_expectations() when using context maneger is used
 
+    # Use @test_case to identify helper methods or non-standard test names
+    @delayed_assert.test_case
+    def verify_something_helper(self):
+        expect(1 == 1)
+
+
 ```
 
 ---------------
