@@ -29,6 +29,8 @@ https://github.com/rackerlabs/python-proboscis/blob/master/proboscis/check.py
 import types
 import inspect
 import os
+import functools
+import threading
 from contextlib import contextmanager
 
 
@@ -119,7 +121,27 @@ def get_check_caller():
     return _check_caller
 
 
+_context = threading.local()
+
+
+def test_case(func):
+    """
+    Decorator to mark a function as a test case.
+    This allows using expect() in functions that don't start with 'test'.
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        _context.test_name = func.__name__
+        try:
+            return func(*args, **kwargs)
+        finally:
+            if hasattr(_context, 'test_name'):
+                del _context.test_name
+    return wrapper
+
+
 _failed_expectations = []
+
 _is_first_call = dict()
 
 
@@ -164,14 +186,17 @@ def expect(expr, msg=None):
     """Keep track of failed expectations."""
     global _failed_expectations, _is_first_call  # noqa: F824
     caller = ''
+    if hasattr(_context, 'test_name'):
+        caller = _context.test_name
 
-    # Ensure that the call is coming from 'test*' method
-    stack_list = inspect.stack()
-    for stack in stack_list:
-        func_name = getattr(stack, 'function', stack[3])
-        if func_name.__contains__('test'):
-            caller = func_name
-            break
+    if caller == '':
+        # Ensure that the call is coming from 'test*' method
+        stack_list = inspect.stack()
+        for stack in stack_list:
+            func_name = getattr(stack, 'function', stack[3])
+            if func_name.__contains__('test'):
+                caller = func_name
+                break
 
     if caller == '':
         if _check_caller:
