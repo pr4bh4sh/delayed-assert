@@ -32,3 +32,15 @@ try:
 except Exception as e:
     print(f'Decorator Failed: {e}')
     sys.exit(1)
+
+# Verify that test files are NOT installed as top-level modules
+modules_to_check = ['test_issue_15', 'test_color_toggle', 'test_issue_33']
+print('Verifying test modules are not leaking...')
+for module in modules_to_check:
+    try:
+        __import__(module)
+        print(f'ERROR: {module} was definitely imported! It should not be installed.')
+        sys.exit(1)
+    except ImportError:
+        pass # This is expected
+print('Clean installation verified (no test modules leaked)')
