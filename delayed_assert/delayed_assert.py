@@ -92,6 +92,33 @@ def get_color_enabled():
     return _color_enabled
 
 
+# Global flag to control caller verification
+# Can be controlled via environment variable DELAYED_ASSERT_CHECK_CALLER
+# or programmatically via set_check_caller()
+_check_caller = os.environ.get('DELAYED_ASSERT_CHECK_CALLER', '1').lower() not in ('0', 'false', 'no', 'off')
+
+
+def set_check_caller(enabled):
+    """
+    Enable or disable caller verification.
+    
+    Args:
+        enabled (bool): True to enable caller verification, False to disable
+    """
+    global _check_caller
+    _check_caller = enabled
+
+
+def get_check_caller():
+    """
+    Get the current caller verification status.
+    
+    Returns:
+        bool: True if caller verification is enabled, False otherwise
+    """
+    return _check_caller
+
+
 _failed_expectations = []
 _is_first_call = dict()
 
@@ -147,9 +174,10 @@ def expect(expr, msg=None):
             break
 
     if caller == '':
-        raise Exception(
-            'Could not identify test method, make sure the call for "expect" '
-            'method is originated with "test" method')
+        if _check_caller:
+            raise Exception(
+                'Could not identify test method, make sure the call for "expect" '
+                'method is originated with "test" method')
 
     if _is_first_call.get(caller, True):
         _failed_expectations = []
