@@ -1,3 +1,4 @@
+"""Expose public API for delayed-assert."""
 from .delayed_assert import (
     expect, assert_expectations,
     test_case,
