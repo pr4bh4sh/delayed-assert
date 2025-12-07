@@ -37,7 +37,9 @@ from contextlib import contextmanager
 # Global flag to control colorization
 # Can be controlled via environment variable DELAYED_ASSERT_ENABLE_COLOR
 # or programmatically via set_color_enabled()
-_color_enabled = os.environ.get('DELAYED_ASSERT_ENABLE_COLOR', '1').lower() not in ('0', 'false', 'no', 'off')
+_color_enabled = os.environ.get(
+    'DELAYED_ASSERT_ENABLE_COLOR', '1'
+).lower() not in ('0', 'false', 'no', 'off')
 
 
 class Color:
@@ -55,7 +57,7 @@ class Color:
 
 
 class NoColor:
-    """No-color definition - all attributes return empty strings."""
+    """Colors definition without ANSI escape codes (for disabled colors)."""
 
     HEADER = ''
     OKBLUE = ''
@@ -69,14 +71,14 @@ class NoColor:
 
 
 def _get_color_instance():
-    """Get the appropriate color instance based on the enabled flag."""
+    """Return the appropriate Color class based on _color_enabled flag."""
     return Color if _color_enabled else NoColor
 
 
 def set_color_enabled(enabled):
     """
     Enable or disable color output.
-    
+
     Args:
         enabled (bool): True to enable colors, False to disable
     """
@@ -87,7 +89,7 @@ def set_color_enabled(enabled):
 def get_color_enabled():
     """
     Get the current color enabled status.
-    
+
     Returns:
         bool: True if colors are enabled, False otherwise
     """
@@ -97,13 +99,15 @@ def get_color_enabled():
 # Global flag to control caller verification
 # Can be controlled via environment variable DELAYED_ASSERT_CHECK_CALLER
 # or programmatically via set_check_caller()
-_check_caller = os.environ.get('DELAYED_ASSERT_CHECK_CALLER', '1').lower() not in ('0', 'false', 'no', 'off')
+_check_caller = os.environ.get(
+    'DELAYED_ASSERT_CHECK_CALLER', '1'
+).lower() not in ('0', 'false', 'no', 'off')
 
 
 def set_check_caller(enabled):
     """
     Enable or disable caller verification.
-    
+
     Args:
         enabled (bool): True to enable caller verification, False to disable
     """
@@ -114,7 +118,7 @@ def set_check_caller(enabled):
 def get_check_caller():
     """
     Get the current caller verification status.
-    
+
     Returns:
         bool: True if caller verification is enabled, False otherwise
     """
@@ -127,6 +131,7 @@ _context = threading.local()
 def test_case(func):
     """
     Decorator to mark a function as a test case.
+
     This allows using expect() in functions that don't start with 'test'.
     """
     @functools.wraps(func)
@@ -151,9 +156,9 @@ def _log_failure(msg=None):
     file_path, line, funcname, contextlist = inspect.stack()[2][1:5]
     context = contextlist[0]
     _failed_expectations.append(
-        color.FAIL+'Failed at "' + color.ENDC + color.OKBLUE + color.UNDERLINE
-        + '%s:%s' % (file_path, line) + color.ENDC + color.FAIL +
-        '", in %s()%s\n%s' % (
+        color.FAIL + 'Failed at "' + color.ENDC + color.OKBLUE +
+        color.UNDERLINE + '%s:%s' % (file_path, line) + color.ENDC +
+        color.FAIL + '", in %s()%s\n%s' % (
             funcname,
             ('\n\t' + color.BOLD + color.UNDERLINE + 'ErrorMessage:' +
              color.ENDC + color.FAIL + '\t%s' % msg + color.ENDC),
@@ -201,8 +206,8 @@ def expect(expr, msg=None):
     if caller == '':
         if _check_caller:
             raise Exception(
-                'Could not identify test method, make sure the call for "expect" '
-                'method is originated with "test" method')
+                'Could not identify test method, make sure the call for '
+                '"expect" method is originated with "test" method')
 
     if _is_first_call.get(caller, True):
         _failed_expectations = []
@@ -213,8 +218,8 @@ def expect(expr, msg=None):
     if isinstance(expr, types.FunctionType):
         try:
             expr()
-        except Exception as exc:
-            _log_failure(exc)
+        except Exception as e:
+            _log_failure(e)
     elif not expr:
         _log_failure(msg)
 
