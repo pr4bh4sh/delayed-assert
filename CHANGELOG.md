@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.3] - 2025-12-07
+
+### Added
+- **Linting & Style Enforcement**: Added `pycodestyle` (PEP 8) and `pydocstyle` (PEP 257) checks to the CI pipeline.
+- Enforced strict code style and docstring standards on the codebase.
+
 ## [0.4.2] - 2025-12-07
 
 ### Added
